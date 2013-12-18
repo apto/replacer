@@ -1,0 +1,21 @@
+{
+  "name": "replacer",
+  "description": "Transform stream that performs text search and replacements",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test/*.js -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/apto/replacer.git"
+  },
+  "author": "Steve Molitor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apto/replace/issues"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "mocha": "~1.15.1"
+  }
+}
