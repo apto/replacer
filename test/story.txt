@@ -1,0 +1,3 @@
+The cow ate the pig.
+The cow ate the hen.
+The cow ate the horse.
