@@ -14,40 +14,43 @@ util.inherits(Replacer, Transform);
    streams are assumed to be text streams.  Replacer is not
    designed to work with binary data.
 
-   @param rules array of rule objects.  For each rule, rule.search is
-   replaced with rule.replace.  Throws Error if rules is empty, null or undefined.
+   @param replacments array of replacement objects.  For each
+   replacement, replacement.search is replaced with replacement.replace.
+
+   For a single search and replace, pass two string arguments search and replace:
+   new Replace('foo', 'bar');
 */
-function Replacer(rules) {
-  if (!rules || rules.length === 0) {
-    throw new Error('Undefined or empty rules array passed to Replacer');
+function Replacer(replacments) {
+  if (arguments.length === 2) {
+    replacments = [{search: arguments[0], replace: arguments[1]}];
   }
 
   Transform.call(this);
   this.buffer = '';
 
-  this.anyMatchRegexp = buildAnyMatchRegexp(rules);
-  this.replacements = buildReplacementsMap(rules);
-  this.partialMatchRegexp = new RegExp(buildPartialMatchRegexp(rules));
+  this.anyMatchRegexp = buildAnyMatchRegexp(replacments);
+  this.replacements = buildReplacementsMap(replacments);
+  this.partialMatchRegexp = new RegExp(buildPartialMatchRegexp(replacments));
 }
 
-function buildAnyMatchRegexp(rules) {
-  var s = rules.map(function (rule) {
-    return '(' + escape(rule.search) + ')';
+function buildAnyMatchRegexp(replacments) {
+  var s = replacments.map(function (r) {
+    return '(' + escape(r.search) + ')';
   }).join('|');
   return new RegExp(s, 'g');
 }
 
-function buildReplacementsMap(rules) {
+function buildReplacementsMap(replacments) {
   var map = {};
-  rules.forEach(function (rule) {
-    map[rule.search] = rule.replace;
+  replacments.forEach(function (r) {
+    map[r.search] = r.replace;
   });
   return map;
 }
 
-function buildPartialMatchRegexp(rules) {
-  var s = rules.map(function (rule) {
-    return '(' + buildOnePartialMatchRegexp(rule.search) + ')';
+function buildPartialMatchRegexp(replacments) {
+  var s = replacments.map(function (r) {
+    return '(' + buildOnePartialMatchRegexp(r.search) + ')';
   }).join('|');
   return new RegExp(s);
 }
@@ -87,6 +90,4 @@ Replacer.prototype._flush = function (done) {
   done();
 };
 
-module.exports = function (replacements) {
-  return new Replacer(replacements);
-};
+module.exports = Replacer;

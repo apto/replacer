@@ -3,7 +3,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var StringStream = require('./string-stream');
-var replacer = require('../index');
+var Replacer = require('../index');
 
 describe('Replacer', function () {
   function collectData(stream, cb) {
@@ -21,12 +21,10 @@ describe('Replacer', function () {
     var expectedOutput = 'The cow ate the dog. The cow ate the dog. The cow ate the dog.';
 
     var inputStream = new StringStream(input);
-    var rules = [{search: 'cat', replace: 'cow'}];
-    var transformStream = replacer(rules);
+    var replacer = new Replacer('cat', 'cow');
+    inputStream.pipe(replacer);
 
-    inputStream.pipe(transformStream);
-
-    collectData(transformStream, function (data) {
+    collectData(replacer, function (data) {
       expect(data).to.equal(expectedOutput);
       done();
     });
@@ -36,16 +34,15 @@ describe('Replacer', function () {
     var input = 'The cat ate the dog. The cat ate the dog. The cat ate the dog.';
     var expectedOutput = 'The cow ate the pig. The cow ate the pig. The cow ate the pig.';
 
-    var rules = [
+    var replacments = [
       { search: 'cat', replace: 'cow' },
       { search: 'dog', replace: 'pig' }
     ];
-    var transformStream = replacer(rules);
-
+    var replacer = new Replacer(replacments);
     var inputStream = new StringStream(input);
-    inputStream.pipe(transformStream);
+    inputStream.pipe(replacer);
 
-    collectData(transformStream, function (data) {
+    collectData(replacer, function (data) {
       expect(data).to.equal(expectedOutput);
       done();
     });
@@ -56,12 +53,11 @@ describe('Replacer', function () {
     var expectedOutput = 'The cow ate the dog. The cow ate the dog. The cow ate the dog.';
 
     var inputStream = new StringStream(input);
-    var rules = [{search: 'cat', replace: 'cow'}];
-    var transformStream = replacer(rules);
+    var replacments = [{search: 'cat', replace: 'cow'}];
+    var replacer = new Replacer(replacments);
+    inputStream.pipe(replacer);
 
-    inputStream.pipe(transformStream);
-
-    collectData(transformStream, function (data) {
+    collectData(replacer, function (data) {
       expect(data).to.equal(expectedOutput);
       done();
     });
@@ -72,11 +68,11 @@ describe('Replacer', function () {
     var expectedOutput = '~!@#$%^&* (){}[cow]';
 
     var inputStream = new StringStream(input);
-    var rules = [{search: 'cat', replace: 'cow'}];
-    var transformStream = replacer(rules);
-    inputStream.pipe(transformStream);
+    var replacments = [{search: 'cat', replace: 'cow'}];
+    var replacer = new Replacer(replacments);
+    inputStream.pipe(replacer);
 
-    collectData(transformStream, function (data) {
+    collectData(replacer, function (data) {
       expect(data).to.equal(expectedOutput);
       done();
     });
