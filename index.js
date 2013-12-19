@@ -1,6 +1,3 @@
-'use strict';
-/*jshint regexp: false */
-
 var Transform = require('stream').Transform;
 var util = require('util');
 

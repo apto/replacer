@@ -25,11 +25,13 @@ The cow ate the horse.
 To replace all occurrences of 'cow' with 'dog' we could do this:
 
 ```js
-var replacer = require('replacer');
+var fs = require('fs');
+var path = require('path');
+var Replacer = require('replacer');
 
 var filePath = path.resolve(__dirname, 'story.txt');
 fs.createReadStream(filePath)
-  .pipe(replacer('cow', 'dog')
+  .pipe(new Replacer('cow', 'dog'))
   .pipe(process.stdout);
 ```
 
@@ -49,11 +51,11 @@ To perform multiple replacements:
 var replacements = [
   { search: 'cow', replace: 'dog' },
   { search: 'pig', replace: 'fox' },
-  { search: 'hen', replace: 'hog' },
+  { search: 'hen', replace: 'hog' }
 ];
 
 fs.createReadStream(filePath)
-  .pipe(replacer(replacments))
+  .pipe(new Replacer(replacements))
   .pipe(process.stdout);
 ```
 
