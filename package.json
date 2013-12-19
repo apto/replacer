@@ -1,6 +1,7 @@
 {
   "name": "replacer",
   "description": "Transform stream that performs text search and replacements",
+  "keywords": ["search", "replace", "stream", "transform"],
   "version": "0.0.1",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test/*.js -R spec"
